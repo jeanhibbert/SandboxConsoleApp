@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using SandboxConsoleApp.Dynamic;
+using System;
 
 namespace SandboxConsoleApp
 {
@@ -10,6 +7,8 @@ namespace SandboxConsoleApp
     {
         static void Main(string[] args)
         {
+            ScriptGenerator.GenerateScript();
+            Console.ReadKey();
         }
     }
 }
