@@ -7,7 +7,9 @@ namespace SandboxConsoleApp
     {
         static void Main(string[] args)
         {
-            ScriptGenerator.GenerateScript();
+            //ScriptGenerator.GenerateScript();
+            BlockChainGenerator.BuildBlockChain();
+
             Console.ReadKey();
         }
     }
