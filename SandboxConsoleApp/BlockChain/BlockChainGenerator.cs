@@ -10,18 +10,20 @@ namespace SandboxConsoleApp
         public static void BuildBlockChain()
         {
             var blockChain = new BlockChain();
-            blockChain.Add(new List<string> { "A gives 1 bitcoin to B" });
-            blockChain.Add(new List<string> { "D gives 1 bitcoin to B" });
-            blockChain.Add(new List<string> { "X gives 1 bitcoin to Y" });
-            blockChain.Add(new List<string> { "Y gives 1 bitcoin to C" });
-            blockChain.Add(new List<string> { "X gives 1 bitcoin to A" });
+
+            blockChain.Add(new string[] { "A gives 1 bitcoin to B" });
+            blockChain.Add(new string[] { "D gives 1 bitcoin to B" });
+            blockChain.Add(new string[] { "X gives 1 bitcoin to Y" });
+            blockChain.Add(new string[] { "Y gives 1 bitcoin to C" });
+            blockChain.Add(new string[] { "X gives 1 bitcoin to A" });
 
             Console.WriteLine(blockChain.IsValid);
 
             // A fraudulent update is made to block 3
-            blockChain[3].Transactions.Add ("Y gives 1 bitcoin to A");
+            blockChain[3].Transactions = new string[] { "Y gives 1 bitcoin to A" };
+            //Console.WriteLine(blockChain.IsValid);
 
-            Console.WriteLine(blockChain.IsValid);
+            blockChain.DisplayBlocks();
 
             Console.ReadKey();
         }
@@ -30,7 +32,7 @@ namespace SandboxConsoleApp
     public interface IBlockChain
     {
         bool IsValid { get; }
-        bool Add(List<string> transactions);
+        bool Add(string[] transactions);
     }
 
     public class BlockChain : IBlockChain
@@ -53,7 +55,7 @@ namespace SandboxConsoleApp
             }
         }
 
-        public bool Add(List<string> transactions)
+        public bool Add(string[] transactions)
         {
             Block block;
             if (_chain.IsEmpty)
@@ -69,42 +71,62 @@ namespace SandboxConsoleApp
             }
             return _chain.TryAdd(_chain.Count, block);
         }
+
+        public void DisplayBlocks()
+        {
+            foreach(var kv in _chain)
+            {
+                Console.WriteLine(kv.Value);
+            }
+        }
         
     }
 
     public class Block
     {
-        public readonly Guid BlockId;
-        public int BlockHash;
-
-        public List<string> Transactions { get; }
+        public string[] Transactions;
         public Block NextBlock { get; internal set; }
-        public Block PreviousBlock { get; internal set; }
+        public object[] Contents { get; }
 
-        private int _previousHash;
+        private readonly int _previousBlockHash;
+        private readonly int _blockHash;
 
-        public Block(Block previousBlock, List<string> transactions)
+        public Block(Block previousBlock, string[] transactions)
         {
-            BlockId = Guid.NewGuid();
-            PreviousBlock = previousBlock;
-            _previousHash = previousBlock == null ? default(int) : previousBlock.BlockHash;
-
+            // All truth is defined during block creation
+            _previousBlockHash = previousBlock == null ? default(int) : previousBlock.BlockHash;
             Transactions = transactions;
-
-            // Create new Block using previous Hash and Transactions for block
-            BlockHash = (new object[] { transactions, _previousHash }).GetHashCode();
+            Contents = new object[] { Transactions, _previousBlockHash };
+            _blockHash = Contents.GetHashCode();
+            Console.WriteLine($"{Transactions} + {_previousBlockHash} = {_blockHash}");
         }
 
         // The magic of the block chain
         public bool IsBlockValid()
         {
-            if (PreviousBlock == null) return true; // Its the first block in the chain so it's automatically valid
-            return !BlockHash.Equals((new object[] { Transactions, PreviousBlock.BlockHash }).GetHashCode());
+            // Its the first block in the chain so it's automatically valid
+            if (_previousBlockHash == default(int)) return true;
+
+            // This is the last block in the chain so it must be valid i.e. we have to trust it's contents
+            if (NextBlock == null) return true;
+
+            // refresh the contents of the object array
+            Contents[0] = Transactions;
+            Contents[1] = _previousBlockHash;
+
+            var nextBlockPreviousHash = Contents.GetHashCode() == NextBlock._previousBlockHash;
+
+            var nextBlockHash = NextBlock.BlockHash == (NextBlock.Contents).GetHashCode();
+
+            if (nextBlockPreviousHash && nextBlockHash) return true;
+
+            return false;
         }
+        public int BlockHash { get { return _blockHash; } }
 
         public override string ToString()
         {
-            return $"Block Id is {BlockId} - BlockHash {BlockHash} : IsVald {IsBlockValid()}";
+            return $"BlockHash {BlockHash} : IsVald {IsBlockValid()}";
         }
     }
 }
