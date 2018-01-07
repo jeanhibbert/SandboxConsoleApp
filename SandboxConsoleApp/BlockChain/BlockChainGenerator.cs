@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace SandboxConsoleApp
 {
@@ -6,53 +9,97 @@ namespace SandboxConsoleApp
     {
         public static void BuildBlockChain()
         {
-            var block1 = new Block(null, new string[] { "A gives 1 bitcoin to B" });
-            var block2 = block1.NextBlock = new Block(block1, new string[] { "D gives 1 bitcoin to B" });
-            var block3 = block2.NextBlock = new Block(block2, new string[] { "X gives 1 bitcoin to Y" });
-            var block4 = block3.NextBlock = new Block(block3, new string[] { "Y gives 1 bitcoin to C" });
-            var block5 = block4.NextBlock = new Block(block3, new string[] { "Y gives 1 bitcoin to C" });
+            var blockChain = new BlockChain();
+            blockChain.Add(new List<string> { "A gives 1 bitcoin to B" });
+            blockChain.Add(new List<string> { "D gives 1 bitcoin to B" });
+            blockChain.Add(new List<string> { "X gives 1 bitcoin to Y" });
+            blockChain.Add(new List<string> { "Y gives 1 bitcoin to C" });
+            blockChain.Add(new List<string> { "X gives 1 bitcoin to A" });
 
-            Console.WriteLine(block1);
-            Console.WriteLine(block2);
-            Console.WriteLine(block3);
-            Console.WriteLine(block4);
-            Console.WriteLine(block5);
+            Console.WriteLine(blockChain.IsValid);
 
-            Console.WriteLine(block1);
-            Console.WriteLine(block2);
-            Console.WriteLine(block3);
             // A fraudulent update is made to block 3
-            block3.Transactions[0] = "Y gives 1 bitcoin to A";
-            
-            // this breaks the chain and results in block 3, 4 and 5 becoming invalid!!
-            Console.WriteLine(block4);
-            Console.WriteLine(block5);
+            blockChain[3].Transactions.Add ("Y gives 1 bitcoin to A");
+
+            Console.WriteLine(blockChain.IsValid);
 
             Console.ReadKey();
         }
     }
 
+    public interface IBlockChain
+    {
+        bool IsValid { get; }
+        bool Add(List<string> transactions);
+    }
+
+    public class BlockChain : IBlockChain
+    {
+        private ConcurrentDictionary<int, Block> _chain = new ConcurrentDictionary<int, Block>();
+
+        public Block this[int index]
+        {
+            get
+            {
+                return _chain[index];
+            }
+        }
+
+        public bool IsValid
+        {
+            get
+            {
+                return _chain.All(x => x.Value.IsBlockValid());
+            }
+        }
+
+        public bool Add(List<string> transactions)
+        {
+            Block block;
+            if (_chain.IsEmpty)
+            {
+                // This is the first block in the blockchain
+                block = new Block(null, transactions);
+            }
+            else
+            { 
+                var previousBlock = _chain[_chain.Count - 1];
+                block = new Block(previousBlock, transactions);
+                previousBlock.NextBlock = block;
+            }
+            return _chain.TryAdd(_chain.Count, block);
+        }
+        
+    }
+
     public class Block
     {
         public readonly Guid BlockId;
-        public readonly int? PreviousBlockHash;
         public int BlockHash;
-        public string[] Transactions { get; set; }
-        public Block NextBlock { get; internal set; }
 
-        public Block(Block previousBlock, string[] transactions)
+        public List<string> Transactions { get; }
+        public Block NextBlock { get; internal set; }
+        public Block PreviousBlock { get; internal set; }
+
+        private int _previousHash;
+
+        public Block(Block previousBlock, List<string> transactions)
         {
             BlockId = Guid.NewGuid();
-            PreviousBlockHash = previousBlock?.BlockHash;
+            PreviousBlock = previousBlock;
+            _previousHash = previousBlock == null ? default(int) : previousBlock.BlockHash;
+
+            Transactions = transactions;
+
             // Create new Block using previous Hash and Transactions for block
-            BlockHash = (new object[] { transactions, PreviousBlockHash }).GetHashCode();
+            BlockHash = (new object[] { transactions, _previousHash }).GetHashCode();
         }
 
         // The magic of the block chain
         public bool IsBlockValid()
         {
-            if (NextBlock == null) return false;
-            return NextBlock.BlockHash.Equals((new object[] { NextBlock.Transactions, BlockHash }).GetHashCode());
+            if (PreviousBlock == null) return true; // Its the first block in the chain so it's automatically valid
+            return !BlockHash.Equals((new object[] { Transactions, PreviousBlock.BlockHash }).GetHashCode());
         }
 
         public override string ToString()
