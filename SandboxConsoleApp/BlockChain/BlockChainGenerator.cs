@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace SandboxConsoleApp
@@ -21,10 +20,8 @@ namespace SandboxConsoleApp
 
             // A fraudulent update is made to block 3
             blockChain[3].Transactions = new string[] { "Y gives 1 bitcoin to A" };
-            //Console.WriteLine(blockChain.IsValid);
 
-            blockChain.DisplayBlocks();
-
+            Console.WriteLine(blockChain.IsValid);
             Console.ReadKey();
         }
     }
@@ -71,14 +68,6 @@ namespace SandboxConsoleApp
             }
             return _chain.TryAdd(_chain.Count, block);
         }
-
-        public void DisplayBlocks()
-        {
-            foreach(var kv in _chain)
-            {
-                Console.WriteLine(kv.Value);
-            }
-        }
         
     }
 
@@ -97,8 +86,7 @@ namespace SandboxConsoleApp
             _previousBlockHash = previousBlock == null ? default(int) : previousBlock.BlockHash;
             Transactions = transactions;
             Contents = new object[] { Transactions, _previousBlockHash };
-            _blockHash = Contents.GetHashCode();
-            Console.WriteLine($"{Transactions} + {_previousBlockHash} = {_blockHash}");
+            _blockHash = Contents.GetHashCodeInternal();
         }
 
         // The magic of the block chain
@@ -114,9 +102,9 @@ namespace SandboxConsoleApp
             Contents[0] = Transactions;
             Contents[1] = _previousBlockHash;
 
-            var nextBlockPreviousHash = Contents.GetHashCode() == NextBlock._previousBlockHash;
+            var nextBlockPreviousHash = Contents.GetHashCodeInternal() == NextBlock._previousBlockHash;
 
-            var nextBlockHash = NextBlock.BlockHash == (NextBlock.Contents).GetHashCode();
+            var nextBlockHash = NextBlock.BlockHash == (NextBlock.Contents).GetHashCodeInternal();
 
             if (nextBlockPreviousHash && nextBlockHash) return true;
 
@@ -129,4 +117,31 @@ namespace SandboxConsoleApp
             return $"BlockHash {BlockHash} : IsVald {IsBlockValid()}";
         }
     }
+
+    public static class Extensions
+    {
+        public static int GetHashCodeInternal(this object[] array)
+        {
+            // if non-null array then go into unchecked block to avoid overflow
+            if (array != null)
+            {
+                unchecked
+                {
+                    int hash = 17;
+
+                    // get hash code for all items in array
+                    foreach (var item in array)
+                    {
+                        hash = hash * 23 + ((item != null) ? item.GetHashCode() : 0);
+                    }
+
+                    return hash;
+                }
+            }
+
+            // if null, hash code is zero
+            return 0;
+        }
+    }
+
 }

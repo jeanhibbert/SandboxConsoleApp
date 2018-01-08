@@ -42,6 +42,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BlockChain\ArrayComparer.cs" />
     <Compile Include="BlockChain\BlockChainGenerator.cs" />
     <Compile Include="Dynamic\ScriptGenerator.cs" />
     <Compile Include="Program.cs" />
