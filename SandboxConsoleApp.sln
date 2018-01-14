@@ -5,6 +5,10 @@ VisualStudioVersion = 15.0.27130.2010
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SandboxConsoleApp", "SandboxConsoleApp\SandboxConsoleApp.csproj", "{BC64A848-F298-4BCA-A0D9-F541C360E644}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServerApp", "ServerApp\ServerApp.csproj", "{7031A5DE-6A19-4D69-BF4A-F758DF80EB96}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sandbox.Contracts", "Sandbox.Contracts\Sandbox.Contracts.csproj", "{9D81098E-F36B-4F89-A40A-E5DD6D0C6A4C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{BC64A848-F298-4BCA-A0D9-F541C360E644}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BC64A848-F298-4BCA-A0D9-F541C360E644}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BC64A848-F298-4BCA-A0D9-F541C360E644}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7031A5DE-6A19-4D69-BF4A-F758DF80EB96}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7031A5DE-6A19-4D69-BF4A-F758DF80EB96}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7031A5DE-6A19-4D69-BF4A-F758DF80EB96}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7031A5DE-6A19-4D69-BF4A-F758DF80EB96}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9D81098E-F36B-4F89-A40A-E5DD6D0C6A4C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9D81098E-F36B-4F89-A40A-E5DD6D0C6A4C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9D81098E-F36B-4F89-A40A-E5DD6D0C6A4C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9D81098E-F36B-4F89-A40A-E5DD6D0C6A4C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

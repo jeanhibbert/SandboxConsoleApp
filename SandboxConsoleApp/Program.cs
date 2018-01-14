@@ -1,4 +1,5 @@
 ﻿using SandboxConsoleApp.Dynamic;
+using SandboxConsoleApp.Http;
 using System;
 
 namespace SandboxConsoleApp
@@ -8,7 +9,9 @@ namespace SandboxConsoleApp
         static void Main(string[] args)
         {
             //ScriptGenerator.GenerateScript();
-            BlockChainGenerator.BuildBlockChain();
+            //BlockChainGenerator.BuildBlockChain();
+
+            HttpClientTests.TestHttpClient();
 
             Console.ReadKey();
         }
