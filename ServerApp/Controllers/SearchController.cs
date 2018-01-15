@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
 using System.Web.Http;
 
 namespace SandboxConsoleApp.Http
@@ -12,9 +9,11 @@ namespace SandboxConsoleApp.Http
     public class SearchController : ApiController
     {
         [HttpPost]
-        //[MustBeMemberOf(Roles = SecurityRoles.Developer)]
+        //[CustomAuth(Roles = SecurityRoles.Developer)]
         public HttpResponseMessage Search(SearchRequest request)
         {
+            Console.WriteLine($"Recieved a request!! : {request.Data}");
+
             SearchResponse response = new SearchResponse
             {
                  Page = 1,

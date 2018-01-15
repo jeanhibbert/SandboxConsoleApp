@@ -17,6 +17,13 @@ namespace SandboxConsoleApp.Http
             return task.ContinueWith(x => GetDataResponse<T>(x)).Result;
         }
 
+        public async Task<TOut> PostAsJsonAsync<TIn, TOut>(TIn input, string url)
+        {
+            var result = await Client.PostAsJsonAsync(url, input);
+            var response  = await result.Content.ReadAsAsync<TOut>();
+            return response;
+        }
+
         public DataResponse<TOut> PostAsJson<TIn, TOut>(TIn input, string url, params object[] args)
         {
             var escapedUrl = NormaliseUrl(url, args);
