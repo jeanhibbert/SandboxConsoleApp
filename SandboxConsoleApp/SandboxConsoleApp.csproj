@@ -60,6 +60,9 @@
     <Compile Include="Http\HttpConnector.Data.cs" />
     <Compile Include="Http\GeneralExtensions.cs" />
     <Compile Include="Http\TestHttpAppConfig.cs" />
+    <Compile Include="LenientKing\ExecutionService.cs" />
+    <Compile Include="LenientKing\Prisoner.cs" />
+    <Compile Include="LenientKing\PrisonerGenerator.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
