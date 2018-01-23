@@ -1,4 +1,5 @@
 ﻿using SandboxConsoleApp.Http;
+using SandboxConsoleApp.RabbitMq;
 using System;
 using System.Linq;
 
@@ -12,8 +13,9 @@ namespace SandboxConsoleApp
             //BlockChainGenerator.BuildBlockChain();
 
             //HttpClientTests.TestHttpConnector();
-            HttpClientTests.TestAsyncHttpConnector();
-            
+            //HttpClientTests.TestAsyncHttpConnector();
+
+            RabbitMqTests.PublishMessageTest();
 
             Console.ReadKey();
         }

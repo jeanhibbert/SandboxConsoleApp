@@ -73,6 +73,15 @@ namespace SandboxConsole.Tests.LenientKing
         }
 
         [TestMethod]
+        public void CanExecute_10_Prisoners_2_sylabyls()
+        {
+            Prisoner lastPrisoner = _executionService.Execute(2, 10);
+
+            Assert.IsNotNull(lastPrisoner);
+            Assert.AreEqual(lastPrisoner.Number, 5);
+        }
+
+        [TestMethod]
         public void CanNotExecute_1_Prisoners_1_sylabyls()
         {
             Prisoner lastPrisoner = _executionService.Execute(1, 1);
@@ -80,8 +89,7 @@ namespace SandboxConsole.Tests.LenientKing
             Assert.IsNotNull(lastPrisoner);
             Assert.AreEqual(lastPrisoner.Number, 1);
         }
-
-
+        
         [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
         public void WillThrowExceptionWhenAttemptingToExecuteZeroPrisoners()
