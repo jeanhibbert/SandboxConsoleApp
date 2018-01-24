@@ -19,11 +19,13 @@ namespace SandboxConsoleApp.RabbitMq
 
             IRabbitSubscriberConfiguration subscriberConfig = new RabbitSubscriberConfiguration();
             SandboxConsumer consumer = new SandboxConsumer();
+
             RabbitSubscriber<SandboxConsumer> subscriber = new RabbitSubscriber<SandboxConsumer>(consumer, subscriberConfig);
+            subscriber.Start();
 
             publisher.Publish(new CommandArgs { Value = "some data" });
 
-            subscriber.Start();
+            
 
             Console.ReadKey();
         }

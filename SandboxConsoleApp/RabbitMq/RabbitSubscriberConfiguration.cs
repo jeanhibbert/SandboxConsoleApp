@@ -28,18 +28,41 @@ namespace SandboxConsoleApp.RabbitMq
         public string UserName { get { return ConfigurationManager.AppSettings["Rabbit.Username"] ?? "guest"; } }
         public string Password { get { return ConfigurationManager.AppSettings["Rabbit.Password"] ?? "guest"; } }
 
-        public string Exchange { get { return ConfigurationManager.AppSettings["Rabbit.Exchange"] ?? "Incoming"; } }
+        public string Exchange
+        {
+            get
+            {
+                return (ConfigurationManager.AppSettings["Rabbit.CommandControl.Exchange"] ?? "RVC.CommandControl")
+                    .ReplaceTokens(new { Environment.MachineName });
+            }
+        }
 
         public string Queue
         {
             get
             {
-                return
-                    (ConfigurationManager.AppSettings["Rabbit.Queue"] ?? "Incoming").ReplaceTokens(
-                        new { Environment.MachineName });
+                return (ConfigurationManager.AppSettings["Rabbit.CommandControl.DynamicConfig.Queue"] ?? "RVC.CommandControl.DynamicConfig")
+                    .ReplaceTokens(new { Environment.MachineName });
             }
         }
 
-        public string BindingKey { get { return ConfigurationManager.AppSettings["Rabbit.BindingKey"] ?? "#"; } }
+        public string BindingKey
+        {
+            get
+            {
+                // MEGA-HACK until DV2 config param is done
+                ////var value = (ConfigurationManager.AppSettings["Rabbit.CommandControl.DynamicConfig.BindingKey"] ?? "DynamicConfig.*")
+                ////    .ReplaceTokens(new { Environment.MachineName });                
+                ////if (value.StartsWith("rvcapp", StringComparison.OrdinalIgnoreCase))
+                ////{
+                ////    value = value.Substring(value.IndexOf(".", StringComparison.OrdinalIgnoreCase) + 1);
+                ////}
+
+                ////return value;
+
+                return (ConfigurationManager.AppSettings["Rabbit.CommandControl.DynamicConfig.BindingKey"] ?? "DynamicConfig.*")
+                    .ReplaceTokens(new { Environment.MachineName });
+            }
+        }
     }
 }
