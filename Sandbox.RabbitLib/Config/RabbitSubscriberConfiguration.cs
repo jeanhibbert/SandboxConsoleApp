@@ -1,4 +1,5 @@
 ﻿using Sandbox.Core;
+using Sandbox.RabbitLib.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -6,9 +7,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Sandbox.RabbitLib.Model
+namespace Sandbox.RabbitLib.Config
 {
-    class RabbitPublisherConfiguration : IRabbitPublisherConfiguration
+    public class RabbitSubscriberConfiguration : IRabbitSubscriberConfiguration
     {
         public string HostName { get { return ConfigurationManager.AppSettings["Rabbit.Host"] ?? "localhost"; } }
         public string VirtualHost { get { return ConfigurationManager.AppSettings["Rabbit.VirtualHost"] ?? "/"; } }
@@ -36,11 +37,20 @@ namespace Sandbox.RabbitLib.Model
             }
         }
 
-        public string RoutingKey
+        public string Queue
         {
             get
             {
-                return (ConfigurationManager.AppSettings["Rabbit.CommandControl.DynamicConfig.SetValue.RoutingKey"] ?? "DynamicConfig.SetValue")
+                return (ConfigurationManager.AppSettings["Rabbit.CommandControl.DynamicConfig.Queue"] ?? "CommandControl.DynamicConfig")
+                    .ReplaceTokens(new { Environment.MachineName });
+            }
+        }
+
+        public string BindingKey
+        {
+            get
+            {
+                return (ConfigurationManager.AppSettings["Rabbit.CommandControl.DynamicConfig.BindingKey"] ?? "DynamicConfig.*")
                     .ReplaceTokens(new { Environment.MachineName });
             }
         }

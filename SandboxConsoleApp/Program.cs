@@ -1,4 +1,5 @@
-﻿using SandboxConsoleApp.Http;
+﻿using SandboxConsoleApp.CSharp;
+using SandboxConsoleApp.Http;
 using SandboxConsoleApp.RabbitMq;
 using System;
 using System.Linq;
@@ -15,7 +16,9 @@ namespace SandboxConsoleApp
             //HttpClientTests.TestHttpConnector();
             //HttpClientTests.TestAsyncHttpConnector();
 
-            RabbitMqTests.PublishMessageTest();
+            //RabbitMqTests.PublishMessageTest();
+
+            CSharpExercises.GeneralTests();
 
             Console.ReadKey();
         }

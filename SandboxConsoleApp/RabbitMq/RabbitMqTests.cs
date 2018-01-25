@@ -1,12 +1,9 @@
 ﻿using Sandbox.RabbitLib;
+using Sandbox.RabbitLib.Config;
 using Sandbox.RabbitLib.Interfaces;
 using Sandbox.RabbitLib.Model;
 using Sandbox.RabbitLib.Services;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SandboxConsoleApp.RabbitMq
 {

@@ -47,6 +47,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Config\RabbitPublisherConfiguration.cs" />
+    <Compile Include="Config\RabbitSubscriberConfiguration.cs" />
     <Compile Include="Interfaces\IActivityMonitorEntity.cs" />
     <Compile Include="Interfaces\IRabbitMessage.cs" />
     <Compile Include="Interfaces\IRabbitPublisherConfiguration.cs" />
