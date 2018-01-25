@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace SandboxConsoleApp
@@ -8,6 +9,7 @@ namespace SandboxConsoleApp
     {
         public static void BuildBlockChain()
         {
+            //TODO : Implement GetHashCode on Blocks
             var blockChain = new BlockChain();
 
             blockChain.Add(new string[] { "A gives 1 bitcoin to B" });
@@ -86,7 +88,7 @@ namespace SandboxConsoleApp
             _previousBlockHash = previousBlock == null ? default(int) : previousBlock.BlockHash;
             Transactions = transactions;
             Contents = new object[] { Transactions, _previousBlockHash };
-            _blockHash = Contents.GetHashCodeInternal();
+            _blockHash = Contents.GetHashCode();
         }
 
         // The magic of the block chain
@@ -116,9 +118,15 @@ namespace SandboxConsoleApp
         {
             return $"BlockHash {BlockHash} : IsVald {IsBlockValid()}";
         }
+
+        public override int GetHashCode()
+        {
+            int hashCode = this.GetHashCodeOnProperties();
+            return hashCode;
+        }
     }
 
-    public static class Extensions
+    public static class HashCodeByPropertyExtensions
     {
         public static int GetHashCodeInternal(this object[] array)
         {
@@ -141,6 +149,18 @@ namespace SandboxConsoleApp
 
             // if null, hash code is zero
             return 0;
+        }
+
+        public static int GetHashCodeOnProperties<T>(this T inspect)
+        {
+            return inspect.GetType().GetProperties().Select(o => o.GetValue(inspect)).GetListHashCode();
+        }
+
+        public static int GetListHashCode<T>(this IEnumerable<T> sequence)
+        {
+            return sequence
+                .Select(item => item.GetHashCode())
+                .Aggregate((total, nextCode) => total ^ nextCode);
         }
     }
 
