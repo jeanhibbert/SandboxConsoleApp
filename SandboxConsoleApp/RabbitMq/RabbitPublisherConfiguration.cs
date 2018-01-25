@@ -10,8 +10,8 @@ namespace Sandbox.RabbitLib.Model
 {
     class RabbitPublisherConfiguration : IRabbitPublisherConfiguration
     {
-        public string HostName { get { return ConfigurationManager.AppSettings["Rabbit.Sts.Host"] ?? "localhost"; } }
-        public string VirtualHost { get { return ConfigurationManager.AppSettings["Rabbit.Sts.VirtualHost"] ?? "/"; } }
+        public string HostName { get { return ConfigurationManager.AppSettings["Rabbit.Host"] ?? "localhost"; } }
+        public string VirtualHost { get { return ConfigurationManager.AppSettings["Rabbit.VirtualHost"] ?? "/"; } }
 
         public int Port
         {

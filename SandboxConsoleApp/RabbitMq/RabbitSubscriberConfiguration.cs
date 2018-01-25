@@ -32,7 +32,7 @@ namespace SandboxConsoleApp.RabbitMq
         {
             get
             {
-                return (ConfigurationManager.AppSettings["Rabbit.CommandControl.Exchange"] ?? "RVC.CommandControl")
+                return (ConfigurationManager.AppSettings["Rabbit.CommandControl.Exchange"] ?? "CommandControl")
                     .ReplaceTokens(new { Environment.MachineName });
             }
         }
@@ -41,7 +41,7 @@ namespace SandboxConsoleApp.RabbitMq
         {
             get
             {
-                return (ConfigurationManager.AppSettings["Rabbit.CommandControl.DynamicConfig.Queue"] ?? "RVC.CommandControl.DynamicConfig")
+                return (ConfigurationManager.AppSettings["Rabbit.CommandControl.DynamicConfig.Queue"] ?? "CommandControl.DynamicConfig")
                     .ReplaceTokens(new { Environment.MachineName });
             }
         }
@@ -50,16 +50,6 @@ namespace SandboxConsoleApp.RabbitMq
         {
             get
             {
-                // MEGA-HACK until DV2 config param is done
-                ////var value = (ConfigurationManager.AppSettings["Rabbit.CommandControl.DynamicConfig.BindingKey"] ?? "DynamicConfig.*")
-                ////    .ReplaceTokens(new { Environment.MachineName });                
-                ////if (value.StartsWith("rvcapp", StringComparison.OrdinalIgnoreCase))
-                ////{
-                ////    value = value.Substring(value.IndexOf(".", StringComparison.OrdinalIgnoreCase) + 1);
-                ////}
-
-                ////return value;
-
                 return (ConfigurationManager.AppSettings["Rabbit.CommandControl.DynamicConfig.BindingKey"] ?? "DynamicConfig.*")
                     .ReplaceTokens(new { Environment.MachineName });
             }

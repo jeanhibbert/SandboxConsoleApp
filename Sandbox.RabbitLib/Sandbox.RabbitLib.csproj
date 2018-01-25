@@ -54,10 +54,13 @@
     <Compile Include="Interfaces\IRabbitSubscriberConfiguration.cs" />
     <Compile Include="Model\ActivityMonitorEntityBase.cs" />
     <Compile Include="Model\CommandArgs.cs" />
+    <Compile Include="Model\RabbitConfig.cs" />
     <Compile Include="Model\RabbitMessage.cs" />
+    <Compile Include="Model\TestRabbitMessage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RabbitExtensions.cs" />
     <Compile Include="Services\RabbitPublisher.cs" />
+    <Compile Include="Services\RabbitService.cs" />
     <Compile Include="Services\RabbitSubscriber.cs" />
     <Compile Include="Services\SandboxConsumer.cs" />
   </ItemGroup>
