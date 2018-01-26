@@ -75,7 +75,9 @@
     <Compile Include="LenientKing\PrisonerGenerator.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ProtectionLevel\ConvertStringService.cs" />
     <Compile Include="ProtectionLevel\ProtectionLevelPerf.cs" />
+    <Compile Include="ProtectionLevel\SimpleChannelBuilder.cs" />
     <Compile Include="RabbitMq\RabbitMqTests.cs" />
   </ItemGroup>
   <ItemGroup>

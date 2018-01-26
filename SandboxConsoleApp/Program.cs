@@ -18,9 +18,11 @@ namespace SandboxConsoleApp
 
             //RabbitMqTests.PublishMessageTest();
 
-            //CSharpExercises.GeneralTests();
+            CSharpExercises.GeneralTests();
 
-            ProtectionLevel.ProtectionLevelPerf.RunPerTests(null);
+            //ProtectionLevel.ProtectionLevelPerf.RunPerTests(null);
+
+            //ProtectionLevel.SimpleChannelBuilder.AssembleBasicServerTest();
 
             Console.ReadKey();
         }

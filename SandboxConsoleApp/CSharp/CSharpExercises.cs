@@ -11,13 +11,58 @@ namespace SandboxConsoleApp.CSharp
     {
         public static void GeneralTests()
         {
+            List<Person> persons = new List<Person> {
+                new Person { PersonId = 1, Cars = new List<string> { "BMW", "Toyota" }, PersonTypeId = 1 },
+                new Person { PersonId = 2, Cars = new List<string> { "Ford", "Toyota" }, PersonTypeId = 2 },
+                new Person { PersonId = 3, Cars = new List<string> { "BMW", "Toyota" , "Ford" }, PersonTypeId = 3 },
+                new Person { PersonId = 4, Cars = new List<string> { "BMW", "Toyota" }, PersonTypeId = 2 },
+             };
+
+            var results = persons
+                .GroupBy(x => x.PersonTypeId, x => x.Cars, 
+                (key, g) => new
+                {
+                    PersonTypeId = key,
+                    Cars = g.SelectMany(y => y).Distinct().OrderBy(y => y).ToList()
+                });
+
+            foreach (var result in results)
+            {
+                Console.WriteLine(result.PersonTypeId + " :");
+                result.Cars.ForEach(x => Console.Write(x));
+                Console.WriteLine();
+            }
+
+            Console.ReadKey();
+        }
+
+        public class Person
+        {
+            public int PersonId { get; set; }
+            public int PersonTypeId { get; set; }
+            public List<string> Cars { get; set; }
+        }
+
+
+        public static void ReverseStringTest()
+        {
+            char[] nameReversedArray = "Jesse James".Reverse().ToArray();
+            var newName = new string(nameReversedArray);
+            Console.WriteLine(newName);
+
+            Console.ReadKey();
+        }
+
+
+        public static void CoVarianceContraVarianceTest()
+        {
             //CovarianceTest();
 
-            IComparer<IShape> areaComparer = new AreaComparer();
-            Shapes.Circles.Sort(areaComparer);
-
-
+            //Contravariance
+            //IComparer<IShape> areaComparer = new AreaComparer();
+            //Shapes.Circles.Sort(areaComparer);
         }
+
 
         private static void CovarianceTest()
         {
